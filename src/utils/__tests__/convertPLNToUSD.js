@@ -8,15 +8,26 @@ describe('ConvertPLNtoUSD', () => {
     expect(convertPLNToUSD(12)).toBe('$3.43');
   });
 
-  it('should return NaN if input is not a number type', () => {
+  it('should return NaN if input is string', () => {
     expect(convertPLNToUSD('6')).toBeNaN();
     expect(convertPLNToUSD('abc')).toBeNaN();
     expect(convertPLNToUSD('-543')).toBeNaN();
-    expect(convertPLNToUSD('hello')).toBeNaN();
-    expect(convertPLNToUSD('1')).toBeNaN();
-    expect(convertPLNToUSD({})).toBeNaN();
-    expect(convertPLNToUSD(undefined)).toBeNaN();
-    expect(convertPLNToUSD(null)).toBeNaN();
-    expect(convertPLNToUSD(true)).toBeNaN();
+  });
+
+  it('should return NaN when input is empty', () => {
+    expect(convertPLNToUSD()).toBeNaN();
+  });
+
+  it('should return "Error" when input is different than number and string', () => {
+    expect(convertPLNToUSD({})).toBe('Error');
+    expect(convertPLNToUSD([])).toBe('Error');
+    expect(convertPLNToUSD(null)).toBe('Error');
+    expect(convertPLNToUSD(function () {})).toBe('Error');
+  });
+
+  it('should return zero when input is lower than zero', () => {
+    expect(convertPLNToUSD(-1)).toBe('$0.00');
+    expect(convertPLNToUSD(-2)).toBe('$0.00');
+    expect(convertPLNToUSD(-56)).toBe('$0.00');
   });
 });
