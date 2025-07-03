@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import CurrencyForm from './CurrencyForm';
 import userEvent from '@testing-library/user-event';
 
@@ -19,25 +19,35 @@ describe('Component CurrencyForm', () => {
   });
 
   it('should call action with correct data when form is filled and submitted', () => {
-    const action = jest.fn();
-    render(<CurrencyForm action={action} />);
+    const testCases = [
+      { amount: '100', from: 'PLN', to: 'USD' },
+      { amount: '20', from: 'USD', to: 'PLN' },
+      { amount: '200', from: 'PLN', to: 'USD' },
+      { amount: '345', from: 'USD', to: 'PLN' },
+    ];
 
-    const amountField = screen.getByTestId('amount');
-    const fromField = screen.getByTestId('from-select');
-    const toField = screen.getByTestId('to-select');
-    const submitButton = screen.getByText('Convert');
+    for (const testObj of testCases) {
+      const action = jest.fn();
+      render(<CurrencyForm action={action} />);
 
-    userEvent.type(amountField, '100');
-    userEvent.selectOptions(fromField, 'PLN');
-    userEvent.selectOptions(toField, 'USD');
+      const amountField = screen.getByTestId('amount');
+      const fromField = screen.getByTestId('from-select');
+      const toField = screen.getByTestId('to-select');
+      const submitButton = screen.getByText('Convert');
 
-    userEvent.click(submitButton);
+      userEvent.type(amountField, testObj.amount);
+      userEvent.selectOptions(fromField, testObj.from);
+      userEvent.selectOptions(toField, testObj.to);
 
-    expect(action).toHaveBeenCalledTimes(1);
-    expect(action).toHaveBeenCalledWith({
-      amount: 100,
-      from: 'PLN',
-      to: 'USD',
-    });
+      userEvent.click(submitButton);
+
+      expect(action).toHaveBeenCalledTimes(1);
+      expect(action).toHaveBeenCalledWith({
+        amount: parseInt(testObj.amount),
+        from: testObj.from,
+        to: testObj.to,
+      });
+      cleanup();
+    }
   });
 });
