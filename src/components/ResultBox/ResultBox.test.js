@@ -58,4 +58,33 @@ describe('Component ResultBox', () => {
       cleanup();
     }
   });
+
+  it('should render the same values if currency is the same', () => {
+    const testCases = [
+      { from: 'USD', to: 'USD', amount: '100', result: '$100.00 = $100.00' },
+      {
+        from: 'PLN',
+        to: 'PLN',
+        amount: '100',
+        result: 'PLN 100.00 = PLN 100.00',
+      },
+    ];
+
+    for (const testObj of testCases) {
+      render(
+        <ResultBox
+          from={testObj.from}
+          to={testObj.to}
+          amount={parseInt(testObj.amount)}
+        />
+      );
+
+      const resultBox = screen.getByTestId('result-box');
+
+      expect(resultBox).toBeDefined();
+      expect(resultBox).toHaveTextContent(testObj.result);
+
+      cleanup();
+    }
+  });
 });
