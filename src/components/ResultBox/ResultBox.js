@@ -18,7 +18,7 @@ const ResultBox = ({ from, to, amount }) => {
   );
 
   return (
-    <div className={styles.result}>
+    <div data-testid='result-box' className={styles.result}>
       {formattedAmount} = {convertedAmount}
     </div>
   );
