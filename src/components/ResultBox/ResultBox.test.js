@@ -26,7 +26,6 @@ describe('Component ResultBox', () => {
 
       const resultBox = screen.getByTestId('result-box');
 
-      expect(resultBox).toBeDefined();
       expect(resultBox).toHaveTextContent(testObj.result);
 
       cleanup();
@@ -52,7 +51,6 @@ describe('Component ResultBox', () => {
 
       const resultBox = screen.getByTestId('result-box');
 
-      expect(resultBox).toBeDefined();
       expect(resultBox).toHaveTextContent(testObj.result);
 
       cleanup();
@@ -81,10 +79,17 @@ describe('Component ResultBox', () => {
 
       const resultBox = screen.getByTestId('result-box');
 
-      expect(resultBox).toBeDefined();
       expect(resultBox).toHaveTextContent(testObj.result);
 
       cleanup();
     }
+  });
+
+  it('should render wrong value if amount is less then zero', () => {
+    render(<ResultBox from='PLN' to='USD' amount={-10} />);
+
+    const resultBox = screen.getByTestId('result-box');
+
+    expect(resultBox).toHaveTextContent('Wrong value...');
   });
 });
